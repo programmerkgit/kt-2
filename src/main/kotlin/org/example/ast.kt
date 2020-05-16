@@ -30,8 +30,8 @@ class Program(val statements: List<Statement>) : Node {
 
 class LetStatement(
     private val token: LetToken,
-    val name: Identifier,
-    val value: Expression?
+    val name: Identifier
+    // val value: Expression?
 ) : Statement {
     override fun statementNode() {
     }
@@ -41,7 +41,8 @@ class LetStatement(
     }
 
     override fun toString(): String {
-        return "${tokenLiteral()} $name = ${value ?: ""};"
+        return "not yet"
+        // return "${tokenLiteral()} $name = ${value ?: ""};"
     }
 
 }
@@ -99,7 +100,7 @@ class BlockStatement(
 
 class Identifier(
     val token: IdentifierToken,
-    val value: Int
+    val value: String
 ) : Node {
     override fun tokenLiteral(): String {
         return token.literal

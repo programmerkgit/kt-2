@@ -47,21 +47,36 @@ class Parser(input: String) {
     }
 
     private fun parseLetStatement(): LetStatement {
-        return when (val letToken = currentToken) {
-            is LetToken -> {
-                when (val identifierToken = nextToken()) {
-                    is IdentifierToken -> {
-                        LetStatement(
-                            letToken,
-                            Identifier(identifierToken, identifierToken.literal.toInt()),
-                            /* TODO implement expression */
-                            null as Expression
-                        )
-                    }
-                    else -> error("unexpected token")
-                }
-            }
-            else -> error("unexpected token")
+        val letToken = assertCurrentToken<LetToken>()
+        val identifierToken = assertNextToken<IdentifierToken>()
+        assertNextToken<AssignToken>()
+        val intToken = assertNextToken<IntToken>()
+        return LetStatement(
+            letToken,
+            Identifier(identifierToken, identifierToken.literal)
+            /* TODO implement expression */
+        )
+    }
+
+    private fun parseExpression(): Expression {
+
+    }
+
+    /* utilities */
+
+    private inline fun <reified T> assertCurrentToken(): T {
+        return assertTokenIs(currentToken)
+    }
+
+    private inline fun <reified T> assertNextToken(): T {
+        return assertTokenIs(nextToken())
+    }
+
+    private inline fun <reified T> assertTokenIs(token: Token): T {
+        if (token is T) {
+            return token
+        } else {
+            error("not expected token ${token.kind} ${token.literal}")
         }
     }
 }
